@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Image Search</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="btn_search">Search</string>
+    <string name="action_search">Search</string>
+    <string name="et_hint">Enter Search Term</string>
+    <string name="title_activity_image_display">ImageDisplayActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="et_settings_hint">Search Engine</string>
+    <string name="btn_settings">Save</string>
+    <string name="tv_Adv_settings">Advanced Search Options</string>
+    <string name="tv_image_Size">Image Size</string>
+    <string name="image_size">Select image size</string>
+    <string-array name="size_arrays">
+        <item>icon</item>
+        <item>small</item>
+        <item>xxlarge</item>
+        <item>huge</item>
+    </string-array>
+    <string name="img_type">Image Type</string>
+	<string name="image_Type">Select image type</string>
+    <string-array name="type_arrays">
+        <item>face</item>
+        <item>photo</item>
+        <item>clipart</item>
+        <item>lineart</item>
+    </string-array>
+    <string name="search_engine">Search Engine</string>
+    <string name="image_Search">Select search engine</string>
+    <string-array name="search_arrays">
+        <item>google</item>
+    </string-array>
+        <string name="btn_load_more">Load More</string>
+</resources>
