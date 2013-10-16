@@ -17,8 +17,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -27,7 +29,7 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-public class SearchActivity extends Activity {
+public class SearchActivity extends Activity implements OnScrollListener{
 
 	EditText etQuery;
 	Button btnSearch;
@@ -38,6 +40,7 @@ public class SearchActivity extends Activity {
 	String size = "icon";
 	String type = "face";
 	int start = 0;
+	boolean isLoading = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,7 @@ public class SearchActivity extends Activity {
 			}
 			
 		});
+		gvResults.setOnScrollListener(this);
 	}
 
 	private void setUpViews() {
@@ -85,6 +89,7 @@ public class SearchActivity extends Activity {
 	}
 	
 	public void loadMore(View v) {
+		isLoading = true;
 		String query = etQuery.getText().toString();
 		start = start+8;
 		String api = "http://ajax.googleapis.com/ajax/services/search/images?rsz=8&" +
@@ -94,6 +99,7 @@ public class SearchActivity extends Activity {
 	}
 	
 	private void search(String api) {
+		isLoading = true;
 		AsyncHttpClient client = new AsyncHttpClient();
 		//https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=android
 		
@@ -231,6 +237,8 @@ public class SearchActivity extends Activity {
 		        }
 		    }
 		});
+		
+		isLoading = false;
 	}
 	
 	public void setSettings(MenuItem mi) {
@@ -249,4 +257,31 @@ public class SearchActivity extends Activity {
 		}
 	}
 
+	
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		Log.d("DEBUG", "firstVisibleItem:"+firstVisibleItem+"visibleItemCount:"+visibleItemCount+"totalItemCount:"+totalItemCount);
+		//loadMore(view);
+		if(isLoading && totalItemCount==0)
+			return;
+		String query = etQuery.getText().toString();
+		start = totalItemCount;
+		String api = "http://ajax.googleapis.com/ajax/services/search/images?rsz=8&" +
+				"start="+start+"&v=1.0&q="+Uri.encode(query)+"&imgsz="+size+"&imgtype="+type;
+		Log.d("DEBUG", api);
+		
+	
+		if(firstVisibleItem==0 && totalItemCount==visibleItemCount)
+			search(api);
+		else if((totalItemCount - visibleItemCount) <= (firstVisibleItem + 8))
+			search(api);
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		Log.d("DEBUG", "onScrollStateChanged");
+		
+	}
+	
 }
